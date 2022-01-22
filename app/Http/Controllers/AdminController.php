@@ -139,6 +139,7 @@ function create(Request $request){
 
 
 }
+
 public function export_excel()
 {
     return Excel::download(new TransaksiExport, 'transaksi.xlsx');
@@ -317,7 +318,62 @@ public function addroleview(){
     return view('adminpage.pages.role');
 } 
 
+function admin_list(Request $request){
+    $users= Product::orderBy("id","DESC");
 
+    $startdate = $request->start_date;
+    $enddate = $request->end_date;
+    $searchname = $request->name_search;
+    if ($startdate){
+        $users = $users->where("created_at",">=",$startdate);
+    }
+    if($enddate){
+        $users = $users->where("created_at","<=",$enddate);
+    }
+    if($searchname){
+        $users = $users->where("name","like",'%'.$searchname.'%');
+    }
+    $users = $users->paginate();
+    return $users;
+}
 
+function admin_show($id){
+    $users = Product::where('id',$id)->orderBy("id","desc")->get();
+
+    return $users;
+}
+
+function admin_update($id, Request $request){
+    $users = Product::where('id',$id)->orderBy("id","desc")->get();
+    if($users){
+        Product::where("id",$id)->update( $request->all());
+    }
+    $users = Product::where('id',$id)->orderBy("id","desc")->get();
+    return $users;
+}
+
+function admin_create(Request $request){
+    $image_64 = $request['img']; 
+    $replace = substr($image_64, 0, strpos($image_64, ',')+1);  
+    $image = str_replace($replace, '', $image_64); 
+    $image = str_replace(' ', '+', $image); 
+    $imageName = Str::random(10).'.jpg';
+    file_put_contents(public_path()."/images/".$imageName,base64_decode($image));
+
+    $data = Product::create([
+        'name'=>$request->name,
+        'qty'=>$request->qty,
+        'price'=>$request->price,
+        'img_url'=>"images/".$imageName,
+        'desc'=> $request->desc,
+        'category'=>$request->category
+    ]);
+    return $data;   
+}
+
+function admin_delete($id){
+
+   return Product::where("id",$id)->delete();
+}
 
 }

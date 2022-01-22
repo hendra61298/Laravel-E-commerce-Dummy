@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/admin', [AdminController::class, 'admin_list']);
+Route::get('/admin/{id}', [AdminController::class, 'admin_show']);
+Route::put('/admin/{id}', [AdminController::class, 'admin_update']);
+Route::post('/admin', [AdminController::class, 'admin_create']);
+Route::post('/admin/delete/{id}', [AdminController::class, 'admin_delete']);
