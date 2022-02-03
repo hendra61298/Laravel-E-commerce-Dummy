@@ -26,7 +26,7 @@ class HomeController extends Controller{
   public function index(){
 
     $product  = Product::orderBy("updated_at","desc")->get();
-    $productminuman = Product::where('category','Minuman')->limit(3)->get();
+    $productminuman = Prosuct::where('category','Minuman')->limit(3)->get();
     $productmakanan = Product::where('category','Makanan')->limit(3)->get();
     $productbuah= Product::where('category','Buah')->limit(3)->get();
     return view('tampilan.pages.home',[
@@ -255,7 +255,19 @@ public function forgottokenview()
 
  public function shoppage(Request $request){
   $cari = $request ->cari;
-  $product  = Product::orderby('id', 'desc')->where('name','like',"%".$cari."%")->orWhere('category','like',"%".$cari."%")->paginate(5);
+  $pricefilter= $request->pricefilter;
+  $product  = Product::where('name','like',"%".$cari."%")->orWhere('category','like',"%".$cari."%");
+  if($pricefilter=="hightolow"){
+    $product = $product->orderby('price','desc');
+    }
+    else if($pricefilter=="lowtohigh"){
+    $product = $product->orderby('price','asc');
+
+    }
+    else{
+      $product = $product->orderby('id','desc');
+    }
+  $product =$product->paginate(5);
   return view('tampilan.pages.shoppage',["product" => $product]);
  }
 }

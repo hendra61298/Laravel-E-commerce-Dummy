@@ -193,6 +193,7 @@
                 $("#jumlah_"+id).val(item.jumlah);
                 $("#price_"+id).html("Rp "+convertNumberToPrice(item.price));
                 localStorage.setItem('cart', JSON.stringify(arraychart));
+                error_log(localStorage.setItem('cart', JSON.stringify(arraychart)));
             } else{
                 alert('Stock tidak mencukupi');
             } 

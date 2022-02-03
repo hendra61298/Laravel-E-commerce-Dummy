@@ -52,9 +52,9 @@
                                 <div class="brand-wrapper">
                                     <div class="brand-list">       
                                     <img class="image-view" src="{{asset($product->img_url)}}" alt="">
-                                    <img class="image-view" src="{{asset($product->productimg[0]->img_url)}}" alt="" >
-                                    <img class="image-view" src="{{asset($product->productimg[1]->img_url)}}" alt="" >
-                                    <img class="image-view" src="{{asset($product->productimg[2]->img_url)}}" alt="" >
+                                    <img class="image-view" src="{{count($product->productimg)>0 ? asset($product->productimg[0]->img_url) : '' }}" alt="" >
+                                    <img class="image-view" src="{{count($product->productimg)>1 ? asset($product->productimg[1]->img_url):''}}" alt="" >
+                                    <img class="image-view" src="{{count($product->productimg)>2 ?asset($product->productimg[2]->img_url):''}}" alt="" >
                           
                                 </div>
                             </div>
