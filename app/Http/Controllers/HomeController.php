@@ -26,7 +26,7 @@ class HomeController extends Controller{
   public function index(){
 
     $product  = Product::orderBy("updated_at","desc")->get();
-    $productminuman = Prosuct::where('category','Minuman')->limit(3)->get();
+    $productminuman = Product::where('category','Minuman')->limit(3)->get();
     $productmakanan = Product::where('category','Makanan')->limit(3)->get();
     $productbuah= Product::where('category','Buah')->limit(3)->get();
     return view('tampilan.pages.home',[

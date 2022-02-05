@@ -12,6 +12,8 @@ use App\Exports\TransaksiExport;
 use App\Models\ImgProduct;
 use App\Models\Category;
 use App\Models\RoleName;
+use Validator;
+use JWTAuth;
 
 use File;
 class AdminController extends Controller{
@@ -374,6 +376,77 @@ function admin_create(Request $request){
 function admin_delete($id){
 
    return Product::where("id",$id)->delete();
+}
+
+function user_login(Request $request){
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required|string|min:6',
+    ]);
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+    if (! $token = auth('api')->attempt($validator->validated())) {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+        
+    return response()->json([
+        'success' => true,
+        'token' => $token,
+    ]);
+}
+
+function user_logout(){
+    auth()->logout();
+    JWTAuth::invalidate(JWTAuth::getToken());
+    return response()->json(['message' => 'User successfully signed out']);
+}
+
+function user_list(){
+    $user = User::orderBy("id","desc")->get();
+    
+    return $user;
+}
+
+function user_show($id){
+    $users = User::where('id',$id)->get();
+
+    return $users;
+}
+function user_delete($id){
+
+    return User::where("id",$id)->delete();
+ }
+
+ function user_create(Request $request){
+    $this->validate(request(), [
+        'name' => 'required',
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
+    
+    $data = User::create([
+        'name'=>$request->name,
+        'email'=>$request->email,
+        'password'=>bcrypt($request->password),
+        'role'=>$request->role
+  
+    ]);
+
+    return response()->json([
+            'success' => true,
+            'message' => 'User created successfully',
+            'data' => $data
+        ], ); 
+}
+
+function user_update($id, Request $request){
+    $users = User::where('id',$id)->orderBy("id","desc")->get();
+    if($users){
+        Product::where("id",$id)->update( $request->all());
+    }
+    $users = Product::where('id',$id)->orderBy("id","desc")->get();
+    return $users;
 }
 
 }
