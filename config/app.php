@@ -162,6 +162,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        
 
         /*
          * Package Service Providers...
@@ -178,6 +180,7 @@ return [
         
         //Excel
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ],
 
     /*
@@ -234,6 +237,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+     'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
 
 
